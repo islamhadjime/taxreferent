@@ -1,0 +1,298 @@
+{% extends "sait/main/Base2.html" %}
+{% load static %}
+
+
+{% block content %}
+  <style>
+    :root {
+        --primary-blue: #0A2E65;
+        --secondary-blue: #3E8EFF;
+        --light-blue: #EFF6FF;
+        --text-dark: #333;
+        --text-light: #666;
+        --white: #fff;
+        --gray-bg: #F8F9FA;
+        --input-border: #CED4DA;
+        --input-focus: #80BDFF;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: var(--text-dark);
+        background-color: var(--gray-bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--secondary-blue);
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: var(--primary-blue);
+    }
+
+    .header {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        padding: 15px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--white);
+    }
+    .header .back-link {
+        color: var(--white);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s ease;
+    }
+    .header .back-link:hover {
+        color: var(--secondary-blue);
+    }
+
+    /* Auth Section */
+    .auth-section {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 0;
+        background-color: var(--light-blue);
+    }
+
+    .auth-card {
+        background-color: var(--white);
+        padding: 50px;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 450px;
+        text-align: center;
+    }
+
+    .auth-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-bottom: 30px;
+    }
+
+    .auth-card p {
+        font-size: 16px;
+        color: var(--text-light);
+        margin-bottom: 30px;
+    }
+
+    .form-group-auth {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group-auth input {
+        width: 100%;
+        padding: 15px 15px 15px 50px; /* Отступ для иконки */
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group-auth input:focus {
+        outline: none;
+        border-color: var(--input-focus);
+        box-shadow: 0 0 0 3px rgba(62, 142, 255, 0.25);
+    }
+
+    .form-group-auth .icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+        font-size: 18px;
+    }
+
+    .btn-auth {
+        background-color: var(--secondary-blue);
+        color: var(--white);
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        width: 100%;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-auth:hover {
+        background-color: #307ae7;
+        transform: translateY(-2px);
+    }
+
+    .auth-card .switch-auth-link {
+        margin-top: 30px;
+        font-size: 16px;
+        color: var(--text-dark);
+    }
+    .auth-card .switch-auth-link a {
+        font-weight: 600;
+    }
+    
+    /* Footer (optional, or use full footer from base.html) */
+    .footer {
+        background-color: var(--primary-blue);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 20px 0;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .auth-card {
+            padding: 30px;
+            margin: 0 20px;
+        }
+        .auth-card h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+        .auth-card p {
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+        .form-group-auth input {
+            padding: 12px 12px 12px 45px;
+            font-size: 15px;
+        }
+        .form-group-auth .icon {
+            left: 15px;
+            font-size: 16px;
+        }
+        .btn-auth {
+            padding: 12px 25px;
+            font-size: 16px;
+        }
+        .auth-card .switch-auth-link {
+            font-size: 15px;
+        }
+    }
+  </style>
+
+  <section class="auth-section">
+    <div class="auth-card">
+        
+        
+        
+        {{inn_error}}
+        <h2>Регистрация</h2>
+        <p>Создайте новый аккаунт, чтобы получить доступ ко всем возможностям сервиса.</p>
+        <form id="registerForm" method="post">
+            {% csrf_token %} 
+            <div class="form-group-auth">
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="reg-username" name="username" placeholder="Имя пользователя" required>
+            </div>
+            <div class="form-group-auth">
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" id="reg-email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group-auth">
+                <i class="fas fa-envelope icon"></i>
+                <input type="text" id="inn" name="inn" placeholder="Инн организации" required>
+            </div>
+            
+            <div class="form-group-auth">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="reg-password" name="password" placeholder="Пароль" required>
+            </div>
+            <div class="form-group-auth">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="reg-password2" name="password2" placeholder="Повторите пароль" required>
+            </div>
+            <button type="submit" class="btn-auth">Зарегистрироваться</button>
+        </form>
+        <div class="switch-auth-link">
+            Уже есть аккаунт? <a href="{% url 'signin' %}">Войти</a>
+        </div>
+    </div>
+  </section>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const registerForm = document.getElementById('registerForm');
+
+        // registerForm.addEventListener('submit', (e) => {
+        //     e.preventDefault(); // Предотвращаем стандартную отправку формы
+
+        //     // Здесь должна быть логика отправки данных формы на сервер для регистрации.
+        //     const username = document.getElementById('reg-username').value;
+        //     const email = document.getElementById('reg-email').value;
+        //     const password = document.getElementById('reg-password').value;
+        //     const password2 = document.getElementById('reg-password2').value;
+
+        //     if (password !== password2) {
+        //         alert('Пароли не совпадают!');
+        //         return;
+        //     }
+
+        //     console.log('Попытка регистрации:', { username, email, password });
+        //     alert('Попытка регистрации (имитация). Проверьте консоль.');
+
+        //     // В реальном приложении:
+        //     // fetch('/api/register/', {
+        //     //     method: 'POST',
+        //     //     headers: {
+        //     //         'Content-Type': 'application/json',
+        //     //         // 'X-CSRFToken': '{{ csrf_token }}', // Для Django
+        //     //     },
+        //     //     body: JSON.stringify({ username, email, password })
+        //     // })
+        //     // .then(response => response.json())
+        //     // .then(data => {
+        //     //     if (data.success) {
+        //     //         alert('Регистрация прошла успешно! Теперь вы можете войти.');
+        //     //         window.location.href = '/login/'; // Перенаправление на страницу входа
+        //     //     } else {
+        //     //         alert('Ошибка регистрации: ' + data.message);
+        //     //     }
+        //     // })
+        //     // .catch(error => {
+        //     //     console.error('Error:', error);
+        //     //     alert('Произошла ошибка при регистрации.');
+        //     // });
+        // });
+    });
+  </script>
+{% endblock %}

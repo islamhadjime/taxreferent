@@ -1,0 +1,454 @@
+{% extends "sait/main/Base2.html" %}
+{% load static %}
+
+
+{% block content %}
+    <style>
+        :root {
+            --primary-blue: #0A2E65;
+            --secondary-blue: #3E8EFF;
+            --light-blue: #EFF6FF;
+            --text-dark: #333;
+            --text-light: #666;
+            --white: #fff;
+            --gray-bg: #F8F9FA;
+            --gradient-blue: linear-gradient(90deg, #3E8EFF 0%, #0A2E65 100%);
+            --gradient-green: linear-gradient(90deg, #6DD5ED 0%, #2193B0 100%);
+            --gradient-orange: linear-gradient(90deg, #FDBB2D 0%, #22C55E 100%); 
+        }
+
+
+        .hero-section {
+            background-color: var(--light-blue);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            flex: 1;
+            padding-right: 40px;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--text-light);
+        }
+
+        .hero-button {
+            background-color: var(--secondary-blue);
+            color: var(--white);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .hero-button:hover {
+            background-color: #307ae7;
+            transform: translateY(-3px);
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 60px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: var(--primary-blue);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--gray-bg);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-card .icon {
+            font-size: 48px;
+            color: var(--secondary-blue);
+            margin-bottom: 20px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            padding: 80px 0;
+            background-color: var(--light-blue);
+        }
+
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .how-it-works-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .how-it-works-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .how-it-works-card.gradient-blue {
+            background-image: var(--gradient-blue);
+            color: var(--white);
+        }
+        .how-it-works-card.gradient-blue .card-title,
+        .how-it-works-card.gradient-blue .card-description {
+            color: var(--white);
+        }
+
+        .how-it-works-card.gradient-green {
+            background-image: var(--gradient-green);
+            color: var(--white);
+        }
+        .how-it-works-card.gradient-green .card-title,
+        .how-it-works-card.gradient-green .card-description {
+            color: var(--white);
+        }
+
+
+        .how-it-works-card .card-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--white); /* For gradient cards */
+        }
+        .how-it-works-card:not([class*="gradient"]) .card-icon {
+            color: var(--secondary-blue); /* For regular cards */
+        }
+
+        .how-it-works-card .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .how-it-works-card .card-description {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+        .how-it-works-card.gradient-blue .card-description,
+        .how-it-works-card.gradient-green .card-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Why Choose Us Section */
+        .why-choose-us-section {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .accordion-item {
+            background-color: var(--gray-bg);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #e0e7ee;
+        }
+
+        .accordion-header i {
+            font-size: 20px;
+            color: var(--secondary-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active i {
+            transform: rotate(90deg);
+        }
+
+        .accordion-content {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            background-color: var(--white);
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        .accordion-content p {
+            padding-bottom: 20px;
+            padding-top: 10px; 
+        }
+
+    </style>
+        <section class="hero-section">
+            <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+                <div class="hero-content">
+                    <h1>TAX-REFERENT — <br>СИСТЕМА ОЦЕНКИ РИСКА</h1>
+                    <p>Упростите процесс выездных проверок. С использованием данного сайта возможно своевременное определение зоны риска проведения выездной налоговой проверки путем проведения анализа, поскольку разработанный сайт основан на Методических рекомендациях по проведению налогового контроля на основе утвержденных налоговым кодексом критериев.</p>
+                    <a href="{% url 'analys' %}" class="hero-button">Начать проверку</a>
+                </div>
+                <div class="hero-image">
+                    <img src="{% static '/main/HOME.png' %}" alt="Человек работает за ноутбуком">
+                </div>
+            </div>
+        </section>
+    
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">Наши возможности</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-search"></i></div>
+                        <h3>Удобная навигация</h3>
+                        <p>Простая и интуитивно понятная навигация по сайту, быстрый доступ к нужной информации.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>Быстрый результат</h3>
+                        <p>Мгновенная обработка данных и предоставление результатов проверки в кратчайшие сроки.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-crosshairs"></i></div>
+                        <h3>Высокая точность</h3>
+                        <p>Алгоритмы, основанные на официальных методиках, обеспечивают максимальную точность.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section class="how-it-works-section">
+            <div class="container">
+                <h2 class="section-title">Что такое проверка?</h2>
+                <div class="how-it-works-grid">
+                    <div class="how-it-works-card gradient-blue">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+                            <h3 class="card-title">Как это работает?</h3>
+                            <p class="card-description">Мы анализируем ваши данные, используя утвержденные методики налогового контроля, чтобы выявить потенциальные риски.</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-card gradient-green">
+                        <div>
+                            <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <h3 class="card-title">Этапы проверки</h3>
+                            <p class="card-description">Сбор данных, автоматизированный анализ, формирование отчета с рекомендациями и оценкой риска.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section class="why-choose-us-section">
+            <div class="container">
+                <h2 class="section-title">Почему выбирают нас</h2>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                  </svg>
+                                  <span>Какие данные используются?</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Мы используем только обезличенные данные, предоставленные вами, а также общедоступные критерии риска от ФНС. Конфиденциальность гарантируется.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16">
+                                    <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+                                    <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                  </svg>
+                                <span>Безопасно и точно</span>
+                            </div>
+                            
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Все расчеты выполняются на основе актуального законодательства и проверенных алгоритмов, обеспечивая высокую точность и надежность.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>  
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database-check" viewBox="0 0 16 16">
+                                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514"/>
+                                    <path d="M12.096 6.223A5 5 0 0 0 13 5.698V7c0 .289-.213.654-.753 1.007a4.5 4.5 0 0 1 1.753.25V4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-.813-.927Q8.378 15 8 15c-1.464 0-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13h.027a4.6 4.6 0 0 1 0-1H8c-1.464 0-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10q.393 0 .774-.024a4.5 4.5 0 0 1 1.102-1.132C9.298 8.944 8.666 9 8 9c-1.464 0-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777M3 4c0-.374.356-.875 1.318-1.313C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4"/>
+                                  </svg>
+                                <span>Несколько алготимы</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>В нашей системе задействованы несколько современных алгоритмов для всестороннего анализа данных и выявления скрытых рисков.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                  </svg>
+                                <span>Понятность результатов</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Результаты проверки представлены в удобном и понятном формате с четкими рекомендациями по минимизации рисков.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                  </svg>
+                                <span>Проверка без загрузки документов</span>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Для базовой оценки рисков не требуется загрузка конфиденциальных документов, что ускоряет процесс и повышает анонимность.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+         
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const accordionItem = header.parentElement;
+                    const accordionContent = header.nextElementSibling;
+
+                    const isActive = header.classList.contains('active');
+
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== header && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            otherHeader.nextElementSibling.style.maxHeight = 0;
+                            otherHeader.nextElementSibling.style.paddingBottom = '0';
+                            otherHeader.nextElementSibling.style.paddingTop = '0';
+                        }
+                    });
+
+                    if (isActive) {
+                        header.classList.remove('active');
+                        accordionContent.style.maxHeight = 0;
+                        accordionContent.style.paddingBottom = '0';
+                        accordionContent.style.paddingTop = '0';
+                    } else {
+                        header.classList.add('active');
+                        accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px';
+                        accordionContent.style.paddingBottom = '20px';
+                        accordionContent.style.paddingTop = '10px';
+                    }
+                });
+            });
+
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+                if (window.scrollY > 0) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

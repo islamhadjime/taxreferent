@@ -1,0 +1,491 @@
+{% extends "sait/main/Base2.html" %}
+
+{% load static %}
+
+{% block content %}
+    <style>
+        :root {
+            --primary-blue: #0A2E65;
+            --secondary-blue: #3E8EFF;
+            --light-blue: #EFF6FF;
+            --text-dark: #333;
+            --text-light: #666;
+            --white: #fff;
+            --gray-bg: #F8F9FA;
+            --input-border: #CED4DA;
+            --input-focus: #80BDFF;
+            --social-vk: #4C75A3;
+            --social-telegram: #0088CC;
+            --social-whatsapp: #25D366;
+            --social-youtube: #FF0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--gray-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .contacts-hero {
+            background-color: var(--light-blue);
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .contacts-hero .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .contacts-hero-content {
+            flex: 1;
+            padding-right: 40px;
+            z-index: 1;
+        }
+
+        .contacts-hero-content h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .contacts-hero-content p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .contacts-hero-image {
+            flex: 0.7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contacts-hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .main-contacts-section {
+            padding: 40px 0;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr; 
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .contact-form-card,
+        .contact-info-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-form-card h2,
+        .contact-info-card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 30px;
+        }
+
+        .form-group-contact {
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #E0E0E0;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group-contact:hover {
+            background-color: #FDFEFF;
+        }
+
+        .form-group-contact:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-group-contact .icon {
+            font-size: 20px;
+            color: var(--secondary-blue);
+            margin-right: 20px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .form-group-contact label {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .form-group-contact input[type="text"],
+        .form-group-contact input[type="email"],
+        .form-group-contact input[type="tel"],
+        .form-group-contact textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            margin-left: auto; 
+            max-width: 300px; 
+        }
+        .form-group-contact textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-group-contact input[type="text"]:focus,
+        .form-group-contact input[type="email"]:focus,
+        .form-group-contact input[type="tel"]:focus,
+        .form-group-contact textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(62, 142, 255, 0.25);
+        }
+
+        .form-group-contact.message-group {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .form-group-contact.message-group label {
+            margin-bottom: 15px;
+        }
+        .form-group-contact.message-group textarea {
+            max-width: 100%;
+            width: 100%;
+        }
+
+
+        .btn-submit-message {
+            background-color: var(--secondary-blue);
+            color: var(--white);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .btn-submit-message:hover {
+            background-color: #307ae7;
+            transform: translateY(-2px);
+        }
+
+        .contact-details {
+            margin-bottom: 30px;
+        }
+        .contact-details div {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 17px;
+            color: var(--text-dark);
+        }
+        .contact-details div i {
+            font-size: 22px;
+            color: var(--secondary-blue);
+            margin-right: 15px;
+            width: 30px; 
+            text-align: center;
+        }
+        .contact-details div span {
+            flex: 1; 
+        }
+
+        .map-container {
+            width: 100%;
+            height: 250px;
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary-blue);
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .social-media h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .social-links a {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .social-links .vk { background-color: var(--social-vk); }
+        .social-links .telegram { background-color: var(--social-telegram); }
+        .social-links .whatsapp { background-color: var(--social-whatsapp); }
+        .social-links .youtube { background-color: var(--social-youtube); }
+
+
+        @media (max-width: 992px) {
+            .contacts-hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .contacts-hero-content {
+                padding-right: 0;
+            }
+            .contacts-hero-image {
+                margin-top: 30px;
+            }
+            .contacts-hero-content h1 {
+                font-size: 32px;
+            }
+            .contacts-hero-content p {
+                font-size: 16px;
+            }
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-form-card, .contact-info-card {
+                padding: 30px 25px;
+            }
+            .contact-form-card h2, .contact-info-card h2 {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+            .form-group-contact input[type="text"],
+            .form-group-contact input[type="email"],
+            .form-group-contact input[type="tel"],
+            .form-group-contact textarea {
+                max-width: 100%;
+            }
+            .social-links a {
+                font-size: 24px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 768px) {
+             .contacts-hero {
+                padding: 40px 0;
+            }
+            .contacts-hero-content h1 {
+                font-size: 28px;
+            }
+            .contacts-hero-content p {
+                font-size: 15px;
+            }
+            .form-group-contact {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-between;
+            }
+            .form-group-contact .icon {
+                margin-right: 0;
+            }
+            .form-group-contact label {
+                flex-basis: 100%;
+                text-align: left;
+                margin-bottom: 5px;
+            }
+            .form-group-contact input,
+            .form-group-contact textarea {
+                width: 100%; 
+            }
+            .btn-submit-message {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+            .contact-details div {
+                font-size: 15px;
+            }
+            .contact-details div i {
+                font-size: 20px;
+            }
+            .social-links a {
+                font-size: 22px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+
+
+
+    <section class="contacts-hero">
+        <div class="container">
+            <div class="contacts-hero-content">
+                <h1>Свяжитесь с нами</h1>
+                <p>Ответим на любые ваши вопросы и поможем с анализом риска.</p>
+            </div>
+            <div class="contacts-hero-image">
+                <img src="https://image.pngaaa.com/949/5878949-middle.png" alt="Человек общается онлайн">
+            </div>
+        </div>
+    </section>
+
+    <section class="main-contacts-section">
+        <div class="container">
+            <div class="contacts-grid">
+                <!-- Left Column: Contact Form -->
+                <div class="contact-form-card">
+                    <h2>Напишите нам сообщение</h2>
+                    <form id="contactForm">
+                        <div class="form-group-contact">
+                            <div class="icon"><i class="fas fa-user"></i></div>
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" name="name" placeholder="Иван Иванов">
+                        </div>
+                        <div class="form-group-contact">
+                            <div class="icon"><i class="fas fa-envelope"></i></div>
+                            <label for="email">Ваш Email</label>
+                            <input type="email" id="email" name="email" placeholder="example@mail.ru">
+                        </div>
+                        <div class="form-group-contact">
+                            <div class="icon"><i class="fas fa-phone-alt"></i></div>
+                            <label for="phone">Телефон (необязательно)</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+7 (XXX) XXX-XX-XX">
+                        </div>
+                        <div class="form-group-contact message-group">
+                            <div class="icon"><i class="fas fa-comment-alt"></i></div>
+                            <label for="message">Ваше сообщение</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Опишите ваш вопрос или предложение..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit-message">Отправить сообщение</button>
+                    </form>
+                </div>
+
+                <div class="contact-info-card">
+                    <div>
+                        <h2>Наши контакты</h2>
+                        <div class="contact-details">
+                            <div><i class="fas fa-map-marker-alt"></i><span>Адрес: г. Москва, ул. Примерная, д. 15</span></div>
+                            <div><i class="fas fa-phone-alt"></i><span>Телефон: +7 (495) 123-45-67</span></div>
+                            <div><i class="fas fa-envelope"></i><span>Email: info@tax-referent.ru</span></div>
+                        </div>
+
+                        <div class="map-container">
+                            <!-- Замените на реальный iframe карты Google Maps -->
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.665042621437!2d37.61763321590453!3d55.75124408054593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a5c88b9c2b3%3A0xd6e5f8b9e6f8b9e6!2sRed%20Square!5e0!3m2!1sen!2sru!4v1678901234567!5m2!1sen!2sru" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="social-media">
+                        <h3>Мы в соцсетях</h3>
+                        <div class="social-links">
+                            <a href="#" class="vk"><i class="fab fa-vk"></i></a>
+                            <a href="#" class="telegram"><i class="fab fa-telegram-plane"></i></a>
+                            <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactForm = document.getElementById('contactForm');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // 1. Собрать данные из формы:
+                //    const formData = new FormData(contactForm);
+                //    const data = Object.fromEntries(formData.entries());
+                // 2. Отправить AJAX-запрос на сервер:
+                //    fetch('/api/contact', {
+                //        method: 'POST',
+                //        body: JSON.stringify(data),
+                //        headers: {
+                //            'Content-Type': 'application/json',
+                //            'X-CSRFToken': '{{ csrf_token }}' // Для Django
+                //        }
+                //    })
+                //    .then(response => response.json())
+                //    .then(result => {
+                //        if (result.success) {
+                //            alert('Ваше сообщение успешно отправлено!');
+                //            contactForm.reset(); // Очистить форму
+                //        } else {
+                //            alert('Произошла ошибка при отправке сообщения: ' + result.message);
+                //        }
+                //    })
+                //    .catch(error => {
+                //        console.error('Error:', error);
+                //        alert('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.');
+                //    });
+
+                // Демонстрация: просто выводим сообщение об отправке
+                alert('Ваше сообщение отправлено (имитация)!');
+                contactForm.reset(); // Очищаем форму для демонстрации
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,1267 @@
+{% extends "sait/main/Base2.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+    .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-container {
+    background: white;
+    margin: 2% auto;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 12px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #e0e0e0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 30px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-left: 4px solid #667eea;
+    padding-left: 12px;
+}
+
+.period-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.input-group input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.form-table th,
+.form-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.form-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    position: sticky;
+    top: 0;
+}
+
+.form-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.form-table input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-table input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+
+.risk-factors {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label:hover {
+    background-color: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.form-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-button.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.form-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.form-button.secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.form-button.secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+        margin: 5% auto;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .period-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-button {
+        width: 100%;
+    }
+    
+    .form-table {
+        font-size: 12px;
+    }
+    
+    .form-table th,
+    .form-table td {
+        padding: 8px;
+    }
+}
+
+
+    .profile-page-container {
+        display: flex;
+        min-height: calc(100vh - 120px); 
+        background-color: #f9fbfd;
+    }
+
+    /* Стили Sidebar */
+    .sidebar {
+        width: 280px;
+        background-color: #ffffff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        padding: 30px 0;
+        border-right: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+    }
+
+    .sidebar-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-nav li {
+        margin-bottom: 5px;
+    }
+
+    .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        padding: 15px 30px;
+        color: #555;
+        text-decoration: none;
+        font-size: 17px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+    .sidebar-nav a:hover {
+        background-color: #f0f8ff; 
+        color: #3498db;
+        border-left-color: #a8d6ff;
+    }
+
+    .sidebar-nav a.active {
+        background-color: #eaf4fb;
+        color: #3498db; 
+        border-left-color: #3498db; 
+        font-weight: 600;
+    }
+
+    .sidebar-nav a .icon {
+        margin-right: 15px;
+        font-size: 20px;
+    }
+
+  
+    .sidebar-footer {
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        margin-top: auto; 
+    }
+
+    .sidebar-footer a {
+        color: #e74c3c; 
+        border-left-color: transparent; 
+    }
+
+    .sidebar-footer a:hover {
+        background-color: #ffebee; 
+        color: #c0392b;
+        border-left-color: #e74c3c;
+    }
+
+  
+    .main-content {
+        flex-grow: 1; 
+        padding: 40px;
+    }
+
+ 
+    .content-section {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+        padding: 40px;
+        margin-bottom: 30px; 
+        animation: fadeIn 0.5s ease-out; 
+    }
+
+    .content-section-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .content-section-header h2 {
+        font-size: 30px;
+        color: #2c3e50;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .content-section-header h2 .icon {
+        margin-right: 15px;
+        font-size: 32px;
+        color: #3498db;
+    }
+
+
+    .info-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-bottom: 20px;
+    }
+
+    .info-field {
+        flex: 1;
+        min-width: calc(50% - 12.5px); 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+
+    .info-field p.value {
+        padding: 13px 18px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+        color: #34495e;
+        font-size: 16px;
+        min-height: 48px; 
+        display: flex;
+        align-items: center;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-bottom: 20px;
+    }
+
+    .form-field {
+        flex: 1;
+        min-width: calc(50% - 12.5px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .form-field input[type="text"],
+    .form-field input[type="email"],
+    .form-field input[type="password"] {
+        width: 100%;
+        padding: 13px 18px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fcfcfc;
+    }
+
+    .form-field input:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        outline: none;
+        background-color: #ffffff;
+    }
+
+    .form-field input:read-only {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+        border-color: #dee2e6;
+        color: #777;
+    }
+
+    .form-actions {
+        margin-top: 30px;
+        text-align: right;
+    }
+
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        border: none;
+        background-color: #3498db;
+        color: #ffffff;
+    }
+
+    .action-button:hover {
+        background-color: #2980b9;
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+    }
+
+    .action-button .icon {
+        margin-right: 8px;
+        font-size: 17px;
+    }
+
+
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 2-3 колонки */
+        gap: 30px;
+    }
+
+    .analysis-card {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        padding: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .analysis-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .card-header .icon {
+        font-size: 30px;
+        color: #3498db;
+        margin-right: 15px;
+    }
+
+    .card-header h4 {
+        font-size: 19px;
+        font-weight: 600;
+        color: #34495e;
+        margin: 0;
+    }
+
+    .card-meta {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-bottom: 20px;
+    }
+
+    .card-meta span {
+        margin-right: 15px;
+    }
+
+    .card-meta .icon {
+        margin-right: 5px;
+        color: #95a5a6;
+    }
+
+    .card-description {
+        font-size: 15px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .card-actions {
+        text-align: right;
+    }
+
+    .card-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .card-button:hover {
+        background-color: #2980b9;
+    }
+
+    .card-button .icon {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .no-analyses {
+        text-align: center;
+        padding: 40px;
+        background-color: #f0f8ff;
+        border: 1px dashed #a8d6ff;
+        border-radius: 8px;
+        color: #6daee7;
+        font-size: 18px;
+    }
+    .no-analyses p {
+        margin-bottom: 15px;
+    }
+    .no-analyses a {
+        display: inline-block;
+        padding: 10px 25px;
+        background-color: #3498db;
+        color: #ffffff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+    .no-analyses a:hover {
+        background-color: #2980b9;
+    }
+
+
+    @media (max-width: 992px) {
+        .profile-page-container {
+            flex-direction: column;
+        }
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+        .sidebar-nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .sidebar-nav li {
+            margin: 0 10px 10px 10px;
+        }
+        .sidebar-nav a {
+            padding: 10px 20px;
+            border-left: none;
+            border-bottom: 3px solid transparent;
+        }
+        .sidebar-nav a.active {
+            border-left: none;
+            border-bottom-color: #3498db;
+        }
+        .sidebar-nav a .icon {
+            margin-right: 8px;
+        }
+        .sidebar-footer {
+            display: none;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .content-section {
+            padding: 25px;
+        }
+        .content-section-header h2 {
+            font-size: 24px;
+        }
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<div class="container">
+  <div class="profile-page-container">
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="{% url 'profile' section='info' %}" class="{% if current_section == 'info' %}active{% endif %}">
+                    <span class="icon"><i class="fas fa-user-circle"></i></span> Профиль
+                </a></li>
+                <li><a href="{% url 'profile' section='settings' %}" class="{% if current_section == 'settings' %}active{% endif %}">
+                    <span class="icon"><i class="fas fa-cog"></i></span> Настройки аккаунта
+                </a></li>
+                <li><a href="{% url 'profile' section='analyses' %}" class="{% if current_section == 'analyses' %}active{% endif %}">
+                    <span class="icon"><i class="fas fa-chart-line"></i></span> Мои анализы
+                </a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{% url 'logout' %}">
+                <span class="icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </span> Выйти
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content">
+        {% if current_section == 'info' %}
+            <!-- Секция информации о компании -->
+            <section class="content-section">
+                <div class="content-section-header">
+                    <h2><span class="icon"><i class="fas fa-building"></i></span> Информация о компании</h2>
+                </div>
+                <div class="info-row">
+                    <div class="info-field">
+                        <label>Название компании</label>
+                        <p class="value">{{ user.name|default:'Не указано' }}</p>
+                    </div>
+                    <div class="info-field">
+                        <label>ИНН</label>
+                        <p class="value">{{ user.inn|default:'Не указано' }}</p>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-field">
+                        <label>ОГРН</label>
+                        <p class="value">{{ user.ogrn|default:'Не указано' }}</p>
+                    </div>
+                    <div class="info-field">
+                        <label>Юридический адрес</label>
+                        <p class="value">{{ user.address|default:'Не указано' }}</p>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-field">
+                        <label>Головная компания</label>
+                        <p class="value">
+                            {% if user.main_company %}
+                                {{ user.main_company.name }}
+                            {% else %}
+                                Не указано
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="info-field">
+                        <label>ЕГРЮЛ / ЕГРИП</label>
+                        <p class="value">{{ user.egrul_data|default:'Не указано' }}</p>
+                    </div>
+                </div>
+            </section>
+        {% elif current_section == 'settings' %}
+            <section class="content-section">
+                <div class="content-section-header">
+                    <h2><span class="icon"><i class="fas fa-cog"></i></span> Настройки аккаунта</h2>
+                </div>
+                
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="post" id="profile-settings-form" action="{% url 'profile' section='settings' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="settings">
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="id_username">Логин</label>
+                            <input type="text" id="id_username" name="username" value="{{ user.username }}" readonly>
+                            <small class="text-muted">Логин изменить нельзя.</small>
+                        </div>
+                        <div class="form-field">
+                            <label for="id_email">Email</label>
+                            <input type="email" id="id_email" name="email" value="{{ user.email|default:'' }}" placeholder="Введите новый Email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="id_current_password">Текущий пароль</label>
+                            <input type="password" id="id_current_password" name="current_password" placeholder="Введите текущий пароль">
+                        </div>
+                        <div class="form-field">
+                            <label for="id_new_password">Новый пароль</label>
+                            <input type="password" id="id_new_password" name="new_password" placeholder="Введите новый пароль">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="id_confirm_password">Подтвердите новый пароль</label>
+                            <input type="password" id="id_confirm_password" name="confirm_password" placeholder="Повторите новый пароль">
+                        </div>
+                        <div class="form-field">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="action-button primary">
+                            <span class="icon"><i class="fas fa-save"></i></span> Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </section>
+        {% elif current_section == 'analyses' %}
+            <!-- Секция анализов -->
+            <section class="content-section">
+                <div class="content-section-header">
+                    <h2><span class="icon"><i class="fas fa-chart-line"></i></span> Мои анализы</h2>
+                    <div>
+                        <button type="button" class="action-button primary" id="open-analysis-modal">
+                            <span class="icon"><i class="fas fa-plus-circle"></i></span> Новый анализ
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-overlay" id="analysis-modal">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Новый финансовый анализ</h2>
+                            <button type="button" class="modal-close" id="close-analysis-modal">&times;</button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <form id="risk-assessment-form" method="post" action="{% url 'create_analysis' %}">
+                                {% csrf_token %}
+                                <div class="form-section">
+                                    <h3>Период анализа</h3>
+                                    <div class="period-inputs">
+                                        <div class="input-group">
+                                            <label for="period-start">Начало периода:</label>
+                                            <input type="date" id="period-start" name="period_start" required>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="period-end">Конец периода:</label>
+                                            <input type="date" id="period-end" name="period_end" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3>Финансовые показатели</h3>
+                                    <div class="table-container">
+                                        <table class="form-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Название показателя</th>
+                                                    <th>Начало периода</th>
+                                                    <th>Конец периода</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Выручка базового периода</th>
+                                                    <td><input type="number" value="1" step="0.01" name="revenue_base_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="revenue_base_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Выручка раннего периода</th>
+                                                    <td><input type="number" value="1" step="0.01" name="revenue_early_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="revenue_early_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Прибыль (убыток) от продаж</th>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_sales_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_sales_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Прибыль до налогообложения (базовый)</th>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_tax_base_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_tax_base_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Прибыль до налогообложения (рентонный)</th>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_tax_rent_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="profit_tax_rent_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Прочие доходы</th>
+                                                    <td><input type="number" value="1" step="0.01" name="other_income_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="other_income_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Себестоимость продаж (базовый)</th>
+                                                    <td><input type="number" value="1" step="0.01" name="cost_sales_base_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="cost_sales_base_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Себестоимость продаж (рентонный)</th>
+                                                    <td><input type="number" value="1" step="0.01" name="cost_sales_rent_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="cost_sales_rent_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Коммерческие расходы</th>
+                                                    <td><input type="number" value="1" step="0.01" name="commercial_expenses_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="commercial_expenses_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Управленческие расходы</th>
+                                                    <td><input type="number" value="1" step="0.01" name="management_expenses_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="management_expenses_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Численность сотрудников</th>
+                                                    <td><input type="number" name="employee_count_start" placeholder="0"></td>
+                                                    <td><input type="number" name="employee_count_end" placeholder="0"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Фонд заработной платы</th>
+                                                    <td><input type="number" value="1" step="0.01" name="salary_fund_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="salary_fund_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Актив бухгалтерского баланса</th>
+                                                    <td><input type="number" value="1" step="0.01" name="balance_sheet_asset_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="balance_sheet_asset_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Проценты к начислению</th>
+                                                    <td><input type="number" value="1" step="0.01" name="accrued_interest_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="accrued_interest_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Итого уплаченных налогов</th>
+                                                    <td><input type="number" value="1" step="0.01" name="total_taxes_paid_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="total_taxes_paid_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>НДС вычет</th>
+                                                    <td><input type="number" value="1" step="0.01" name="vat_deduction_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="vat_deduction_end" placeholder="0.00"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>НДС начислил</th>
+                                                    <td><input type="number" value="1" step="0.01" name="vat_accrued_start" placeholder="0.00"></td>
+                                                    <td><input type="number" value="1" step="0.01" name="vat_accrued_end" placeholder="0.00"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3>Факторы риска</h3>
+                                    <div class="risk-factors">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="doubtful_counterparties">
+                                            <span class="checkmark"></span>
+                                            Сомнительные контрагенты
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="no_explanation_notification">
+                                            <span class="checkmark"></span>
+                                            Отсутствие пояснений на уведомление
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="frequent_location_change">
+                                            <span class="checkmark"></span>
+                                            Частая смена местонахождения
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-buttons">
+                                    <button type="button" class="form-button secondary" id="methodology-button">
+                                        Методика анализа
+                                    </button>
+                                    <button type="submit" class="form-button primary" id="calculate-button">
+                                        Вычислить анализ
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                
+                {% if analyses %}
+                <div class="analytics-grid">
+                    {% for analysis in analyses %}
+                    <div class="analysis-card">
+                        <div>
+                            <div class="card-header">
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <h4>Анализ от {{ analysis.creation_date|date:"d.m.Y" }}</h4>
+                            </div>
+                            <div class="card-meta">
+                                <span><span class="icon"><i class="fas fa-calendar-alt"></i></span> 
+                                    {{ analysis.period_start_date|date:"d.m.Y" }} - {{ analysis.period_end_date|date:"d.m.Y" }}</span>
+                                <span><span class="icon"><i class="fas fa-percent"></i></span> 
+                                    Результат: {% if analysis.is_positive_result %}Положительный{% else %}Требует внимания{% endif %}</span>
+                            </div>
+                            <div class="card-description">
+                                Анализ финансовых показателей за указанный период.
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="{% url 'analysis_detail' analysis.id %}" class="card-button">
+                                <span class="icon"><i class="fas fa-eye"></i></span> Подробнее
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-analyses">
+                    <p>У вас пока нет выполненных анализов.</p>
+                </div>
+                {% endif %}
+            </section>
+        {% endif %}
+    </main>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const settingsForm = document.getElementById('profile-settings-form');
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', function(event) {
+                const newPassword = document.getElementById('id_new_password').value;
+                const confirmPassword = document.getElementById('id_confirm_password').value;
+                const currentPassword = document.getElementById('id_current_password').value;
+                const emailField = document.getElementById('id_email');
+
+                let isValid = true;
+
+                if (emailField.value && !/\S+@\S+\.\S+/.test(emailField.value)) {
+                    alert('Пожалуйста, введите корректный Email.');
+                    emailField.focus();
+                    isValid = false;
+                }
+
+                if (newPassword || confirmPassword || currentPassword) {
+                    if (!currentPassword) {
+                        alert('Пожалуйста, введите текущий пароль для изменения пароля.');
+                        document.getElementById('id_current_password').focus();
+                        isValid = false;
+                    } else if (newPassword && newPassword.length < 8) {
+                        alert('Новый пароль должен содержать не менее 8 символов.');
+                        document.getElementById('id_new_password').focus();
+                        isValid = false;
+                    } else if (newPassword !== confirmPassword) {
+                        alert('Новый пароль и его подтверждение не совпадают.');
+                        document.getElementById('id_confirm_password').focus();
+                        isValid = false;
+                    }
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('analysis-modal');
+        const openBtn = document.getElementById('open-analysis-modal');
+        const closeBtn = document.getElementById('close-analysis-modal');
+        const form = document.getElementById('risk-assessment-form');
+        if (openBtn) {
+            openBtn.addEventListener('click', function() {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; 
+            });
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+        
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Валидация формы
+                if (validateForm()) {
+                    // Сбор данных формы
+                    const formData = new FormData(form);
+                    const analysisData = Object.fromEntries(formData);
+                    
+                    // Отправка данных на сервер
+                    submitAnalysis(analysisData);
+                }
+            });
+        }
+        
+        const methodologyBtn = document.getElementById('methodology-button');
+        if (methodologyBtn) {
+            methodologyBtn.addEventListener('click', function() {
+                alert('Методика анализа рисков основана на финансовых коэффициентах и качественных показателях...');
+            });
+        }
+    });
+
+    function validateForm() {
+        const periodStart = document.getElementById('period-start').value;
+        const periodEnd = document.getElementById('period-end').value;
+        
+        if (!periodStart || !periodEnd) {
+            alert('Пожалуйста, укажите период анализа');
+            return false;
+        }
+        
+        if (new Date(periodStart) >= new Date(periodEnd)) {
+            alert('Дата начала периода должна быть раньше даты окончания');
+            return false;
+        }
+        
+        return true;
+    }
+
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    function submitAnalysis(data) {
+        // Показываем индикатор загрузки
+        const calculateBtn = document.getElementById('calculate-button');
+        const originalText = calculateBtn.textContent;
+        calculateBtn.textContent = 'Анализируем...';
+        calculateBtn.disabled = true;
+        
+        fetch('/analysis/create/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                showAnalysisResult(result.result);
+                setTimeout(() => {
+                    window.location.href = result.redirect_url;
+                }, 3000);
+            } else {
+                alert('Ошибка: ' + result.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Произошла ошибка при отправке данных');
+        })
+        .finally(() => {
+        calculateBtn.textContent = originalText;
+        calculateBtn.disabled = false;
+    });
+}
+
+    function showAnalysisResult(result) {
+        const modalBody = document.querySelector('.modal-body');
+        
+        let resultHtml = `
+            <div class="analysis-result">
+                <h3 style="color: ${result.is_positive ? '#28a745' : '#dc3545'};">
+                    ${result.is_positive ? '✅ Положительный результат' : '⚠️ Требует внимания'}
+                </h3>
+                <div class="result-metrics">
+                    <div class="metric">
+                        <span class="label">Общий балл риска:</span>
+                        <span class="value ${result.risk_score < 30 ? 'low-risk' : result.risk_score < 60 ? 'medium-risk' : 'high-risk'}">
+                            ${result.risk_score}/100
+                        </span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Рентабельность:</span>
+                        <span class="value">${result.profitability}%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Рост выручки:</span>
+                        <span class="value ${result.revenue_growth >= 0 ? 'positive' : 'negative'}">
+                            ${result.revenue_growth}%
+                        </span>
+                    </div>
+                </div>
+                <div class="indicators">
+                    <h4>Индикаторы риска:</h4>
+                    <div class="indicator ${result.indicators.prbm ? 'active' : ''}">PRBM</div>
+                    <div class="indicator ${result.indicators.optr ? 'active' : ''}">OPTR</div>
+                    <div class="indicator ${result.indicators.ndss ? 'active' : ''}">NDSS</div>
+                    <div class="indicator ${result.indicators.retab ? 'active' : ''}">RETAB</div>
+                </div>
+                <p>Перенаправление на страницу деталей анализа...</p>
+            </div>
+        `;
+        
+        modalBody.innerHTML = resultHtml;
+    }
+
+    // CSS для результатов
+    const resultStyles = `
+    .analysis-result {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .result-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .metric {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+    }
+
+    .metric .label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .metric .value {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .value.low-risk { color: #28a745; }
+    .value.medium-risk { color: #ffc107; }
+    .value.high-risk { color: #dc3545; }
+    .value.positive { color: #28a745; }
+    .value.negative { color: #dc3545; }
+
+    .indicators {
+        margin: 20px 0;
+    }
+
+    .indicator {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 5px;
+        background: #e9ecef;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .indicator.active {
+        background: #dc3545;
+        color: white;
+    }
+    `;
+
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = resultStyles;
+    document.head.appendChild(styleSheet);
+
+</script>
+{% endblock %}

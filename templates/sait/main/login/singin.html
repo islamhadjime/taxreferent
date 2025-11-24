@@ -1,0 +1,235 @@
+{% extends "sait/main/Base2.html" %}
+{%load static %}
+
+
+{% block content %}
+
+  <style>
+    :root {
+        --primary-blue: #0A2E65;
+        --secondary-blue: #3E8EFF;
+        --light-blue: #EFF6FF;
+        --text-dark: #333;
+        --text-light: #666;
+        --white: #fff;
+        --gray-bg: #F8F9FA;
+        --input-border: #CED4DA;
+        --input-focus: #80BDFF;
+    }
+
+    
+    .auth-section {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 0;
+        background-color: var(--light-blue);
+    }
+
+    .auth-card {
+        background-color: var(--white);
+        padding: 50px;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 450px;
+        text-align: center;
+    }
+
+    .auth-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-bottom: 30px;
+    }
+
+    .auth-card p {
+        font-size: 16px;
+        color: var(--text-light);
+        margin-bottom: 30px;
+    }
+
+    .form-group-auth {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group-auth input {
+        width: 100%;
+        padding: 15px 15px 15px 50px; /* Отступ для иконки */
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group-auth input:focus {
+        outline: none;
+        border-color: var(--input-focus);
+        box-shadow: 0 0 0 3px rgba(62, 142, 255, 0.25);
+    }
+
+    .form-group-auth .icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+        font-size: 18px;
+    }
+
+    .auth-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+
+    .auth-options .remember-me {
+        display: flex;
+        align-items: center;
+    }
+    .auth-options .remember-me input {
+        margin-right: 8px;
+        accent-color: var(--secondary-blue);
+        cursor: pointer;
+    }
+
+    .btn-auth {
+        background-color: var(--secondary-blue);
+        color: var(--white);
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        width: 100%;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-auth:hover {
+        background-color: #307ae7;
+        transform: translateY(-2px);
+    }
+
+    .auth-card .switch-auth-link {
+        margin-top: 30px;
+        font-size: 16px;
+        color: var(--text-dark);
+    }
+    .auth-card .switch-auth-link a {
+        font-weight: 600;
+    }
+
+
+
+    @media (max-width: 768px) {
+        .auth-card {
+            padding: 30px;
+            margin: 0 20px;
+        }
+        .auth-card h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+        .auth-card p {
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+        .form-group-auth input {
+            padding: 12px 12px 12px 45px;
+            font-size: 15px;
+        }
+        .form-group-auth .icon {
+            left: 15px;
+            font-size: 16px;
+        }
+        .auth-options {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .btn-auth {
+            padding: 12px 25px;
+            font-size: 16px;
+        }
+        .auth-card .switch-auth-link {
+            font-size: 15px;
+        }
+    }
+  </style>
+  <section class="auth-section">
+    <div class="auth-card">
+        {{inn_error}}
+        <h2>Вход</h2>
+        <p>Добро пожаловать обратно! Пожалуйста, войдите в свой аккаунт.</p>
+        <form id="loginForm" method="post" action="{% url 'signin' %}">
+            {% csrf_token %} 
+            <div class="form-group-auth">
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="username" name="username" value="username" placeholder="Имя пользователя или Email" required>
+            </div>
+            <div class="form-group-auth">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" name="password" value="password" placeholder="Пароль" required>
+            </div>
+            <div class="auth-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Запомнить меня</label>
+                </div>
+                <a href="#" class="forgot-password-link">Забыли пароль?</a>
+            </div>
+            <button type="submit" class="btn-auth">Войти</button>
+        </form>
+        <div class="switch-auth-link">
+            Еще нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a>
+        </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('loginForm');
+
+        // loginForm.addEventListener('submit', (e) => {
+        //     e.preventDefault(); // Предотвращаем стандартную отправку формы
+
+        //     // Здесь должна быть логика отправки данных формы на сервер для аутентификации.
+        //     const username = document.getElementById('username').value;
+        //     const password = document.getElementById('password').value;
+        //     const rememberMe = document.getElementById('rememberMe').checked;
+
+        //     console.log('Попытка входа:', { username, password, rememberMe });
+        //     alert('Попытка входа (имитация). Проверьте консоль.');
+
+        //     // В реальном приложении:
+        //     // fetch('/api/login/', {
+        //     //     method: 'POST',
+        //     //     headers: {
+        //     //         'Content-Type': 'application/json',
+        //     //         // 'X-CSRFToken': '{{ csrf_token }}', // Для Django
+        //     //     },
+        //     //     body: JSON.stringify({ username, password, rememberMe })
+        //     // })
+        //     // .then(response => response.json())
+        //     // .then(data => {
+        //     //     if (data.success) {
+        //     //         alert('Вход выполнен успешно!');
+        //     //         window.location.href = '/dashboard/'; // Перенаправление
+        //     //     } else {
+        //     //         alert('Ошибка входа: ' + data.message);
+        //     //     }
+        //     // })
+        //     // .catch(error => {
+        //     //     console.error('Error:', error);
+        //     //     alert('Произошла ошибка при входе.');
+        //     // });
+        // });
+    });
+  </script>
+{% endblock %}

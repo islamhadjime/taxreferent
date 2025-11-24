@@ -1,0 +1,542 @@
+{% extends "sait/main/Base2.html" %}
+{% load static %}
+
+{% block content %}
+      <style>
+        :root {
+            --primary-blue: #0A2E65;
+            --secondary-blue: #3E8EFF;
+            --light-blue: #EFF6FF;
+            --text-dark: #333;
+            --text-light: #666;
+            --white: #fff;
+            --gray-bg: #F8F9FA;
+            --input-border: #CED4DA;
+            --input-focus: #80BDFF;
+            --success-green: #28A745;
+            --warning-orange: #FFC107;
+            --danger-red: #DC3545;
+        }
+
+     
+       
+
+        /* Hero section for Analysis page */
+        .analysis-hero {
+            background-color: var(--light-blue);
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .analysis-hero .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .analysis-hero-content {
+            flex: 1;
+            padding-right: 40px;
+            z-index: 1;
+        }
+
+        .analysis-hero-content h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        .analysis-hero-content p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .analysis-hero-image {
+            flex: 0.7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .analysis-hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+  .form-section {
+        padding: 60px 0;
+        background-color: #f9fbfd;
+    }
+
+    .form-container {
+        max-width: 900px; 
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 40px;
+        position: relative;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+        font-size: 32px;
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .form-header p {
+        font-size: 16px;
+        color: #7f8c8d; 
+    }
+
+    .form-table {
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0 10px; 
+    }
+
+    .form-table th,
+    .form-table td {
+        padding: 15px 0;
+        vertical-align: middle;
+    }
+
+    .form-table th {
+        text-align: left;
+        font-weight: 600;
+        color: #34495e; 
+        width: 40%; 
+        padding-left: 15px;
+    }
+
+    .form-table td {
+        text-align: center;
+        width: 30%; 
+    }
+
+    .form-table tr:first-child th {
+        padding-top: 0;
+    }
+
+    .form-table tr:first-child td {
+        padding-top: 0;
+    }
+
+    .form-table input[type="text"],
+    .form-table input[type="date"] {
+        width: calc(100% - 30px); 
+        padding: 12px 15px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-table input[type="text"]:focus,
+    .form-table input[type="date"]:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .form-table input[type="checkbox"] {
+        transform: scale(1.5); 
+        margin-top: 5px;
+        accent-color: #3498db; 
+    }
+    .form-buttons {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .form-button {
+        display: inline-block;
+        padding: 15px 35px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .form-button.primary {
+        background-color: #3498db; 
+        color: #ffffff;
+        border: 2px solid #3498db;
+    }
+
+    .form-button.primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+
+    .form-button.secondary {
+        background-color: #ffffff;
+        color: #3498db;
+        border: 2px solid #3498db;
+    }
+
+    .form-button.secondary:hover {
+        background-color: #eaf4fb;
+    }
+
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 1000; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgba(0, 0, 0, 0.6); 
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 40px;
+        border-radius: 12px;
+        width: 80%; 
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+        animation: animatetop 0.4s;
+    }
+
+    @keyframes animatetop {
+        from {top: -300px; opacity: 0}
+        to {top: 0; opacity: 1}
+    }
+
+    .modal-content h3 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .modal-content p {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .modal-button {
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .modal-button.register {
+        background-color: #2ecc71; 
+        color: #ffffff;
+        border: 2px solid #2ecc71;
+    }
+
+    .modal-button.register:hover {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+
+    .modal-button.cancel {
+        background-color: #bdc3c7; 
+        color: #ffffff;
+        border: 2px solid #bdc3c7;
+    }
+
+    .modal-button.cancel:hover {
+        background-color: #95a5a6;
+        border-color: #95a5a6;
+    }
+
+    .date-input-container {
+        position: relative;
+        display: inline-block;
+        width: calc(100% - 30px); 
+    }
+
+    .date-input-container input {
+        padding-right: 40px; 
+    }
+
+    .date-input-container .date-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+        pointer-events: none; 
+        font-size: 18px;
+    }
+    </style>
+
+
+
+    <section class="analysis-hero">
+        <div class="container">
+            <div class="analysis-hero-content">
+                <h1>TAX-REFERENT — <br>СИСТЕМА ОЦЕНКИ РИСКА</h1>
+                <p>Заполните форму для расчета вашей вероятности выездной налоговой проверки.</p>
+            </div>
+            <div class="analysis-hero-image">
+                <img src="https://i.postimg.cc/qvjYPBvf/cover.png" alt="Человек работает с графиками">
+            </div>
+        </div>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Расчет налоговых рисков</h2>
+                <p>Заполните форму для проведения анализа и получения предварительного отчета.</p>
+            </div>
+    
+            <form id="risk-assessment-form">
+                <table class="form-table">
+                    <thead>
+                        <tr>
+                            <th>Название показателя</th>
+                            <td>Начало периода</td>
+                            <td>Конец периода</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Выручка базового периода</th>
+                            <td><input type="text" name="revenue_base_start"></td>
+                            <td><input type="text" name="revenue_base_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Выручка раннего периода</th>
+                            <td><input type="text" name="revenue_early_start"></td>
+                            <td><input type="text" name="revenue_early_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Прибыль (убыток) от продаж</th>
+                            <td><input type="text" name="profit_sales_start"></td>
+                            <td><input type="text" name="profit_sales_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Прибыль(убыток) до налогообложения базового периода</th>
+                            <td><input type="text" name="profit_tax_base_start"></td>
+                            <td><input type="text" name="profit_tax_base_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Прибыль(убыток) до налогообложения ренного периода</th>
+                            <td><input type="text" name="profit_tax_rent_start"></td>
+                            <td><input type="text" name="profit_tax_rent_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Прочие доходы</th>
+                            <td><input type="text" name="other_income_start"></td>
+                            <td><input type="text" name="other_income_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Себестоимость продаж базового периода</th>
+                            <td><input type="text" name="cost_sales_base_start"></td>
+                            <td><input type="text" name="cost_sales_base_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Себестоимость продаж ренного периода</th>
+                            <td><input type="text" name="cost_sales_rent_start"></td>
+                            <td><input type="text" name="cost_sales_rent_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Коммерческие расходы</th>
+                            <td><input type="text" name="commercial_expenses_start"></td>
+                            <td><input type="text" name="commercial_expenses_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Управленческие расходы</th>
+                            <td><input type="text" name="management_expenses_start"></td>
+                            <td><input type="text" name="management_expenses_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Численность сотрудников</th>
+                            <td><input type="text" name="employee_count_start"></td>
+                            <td><input type="text" name="employee_count_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Общая сумма фонда заработной платы</th>
+                            <td><input type="text" name="salary_fund_start"></td>
+                            <td><input type="text" name="salary_fund_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Актив бухгалтерского баланса</th>
+                            <td><input type="text" name="balance_sheet_asset_start"></td>
+                            <td><input type="text" name="balance_sheet_asset_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Проценты к начислению</th>
+                            <td><input type="text" name="accrued_interest_start"></td>
+                            <td><input type="text" name="accrued_interest_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Итого уплаченных налогов</th>
+                            <td><input type="text" name="total_taxes_paid_start"></td>
+                            <td><input type="text" name="total_taxes_paid_end"></td>
+                        </tr>
+                        <tr>
+                            <th>НДСвычет</th>
+                            <td><input type="text" name="vat_deduction_start"></td>
+                            <td><input type="text" name="vat_deduction_end"></td>
+                        </tr>
+                        <tr>
+                            <th>НДСначислил</th>
+                            <td><input type="text" name="vat_accrued_start"></td>
+                            <td><input type="text" name="vat_accrued_end"></td>
+                        </tr>
+                        <tr>
+                            <th>Сомнительные контрагенты</th>
+                            <td colspan="2" style="text-align: right; padding-right: 15px;"><input type="checkbox" name="doubtful_counterparties"></td>
+                        </tr>
+                        <tr>
+                            <th>Отсутствие пояснений на уведомление</th>
+                            <td colspan="2" style="text-align: right; padding-right: 15px;"><input type="checkbox" name="no_explanation_notification"></td>
+                        </tr>
+                        <tr>
+                            <th>Частая смена местонахождения</th>
+                            <td colspan="2" style="text-align: right; padding-right: 15px;"><input type="checkbox" name="frequent_location_change"></td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <div class="form-buttons">
+                     <a href="{% static 'main/Методика анализа.docx' %}" target="_blank"  class="form-button secondary" download="Методика анализа.docx">
+                        Методика анализа
+                     </a>
+                    <button type="submit" class="form-button primary" id="calculate-button">Вычислить</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <div class="icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Интересные результаты найдены!</h3>
+            <p>Мы обнаружили потенциальные риски или интересные тенденции. Для получения полного и подробного отчета с рекомендациями, пожалуйста, зарегистрируйтесь или войдите в систему.</p>
+            <div class="modal-buttons">
+                {% if user.is_authenticated %}
+                    <a href="/profile" class="modal-button register">Профиль</a>
+                {% else %}
+                    <a href="/signup" class="modal-button register">Зарегистрироваться</a>
+                {% endif %}
+                <button type="button" class="modal-button cancel" id="closeModal">Позже</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateButton = document.getElementById('calculate-button');
+            const resultModal = document.getElementById('resultModal');
+            const closeModalButton = document.getElementById('closeModal');
+            const methodologyButton = document.getElementById('methodology-button');
+    
+            // Обработчик для кнопки "Вычислить"
+            calculateButton.addEventListener('click', function(event) {
+                event.preventDefault(); 
+                resultModal.style.display = 'flex'; 
+            });
+    
+            closeModalButton.addEventListener('click', function() {
+                resultModal.style.display = 'none'; 
+            });
+    
+            window.addEventListener('click', function(event) {
+                if (event.target == resultModal) {
+                    resultModal.style.display = 'none';
+                }
+            });
+    
+            methodologyButton.addEventListener('click', function() {
+                alert('Здесь будет информация о методике анализа!');
+            });
+    
+            // Добавляем обработчик для полей ввода дат (если вы будете использовать datepicker)
+            // const dateInputs = document.querySelectorAll('input[type="date"]');
+            // dateInputs.forEach(input => {
+            //     input.addEventListener('focus', function() {
+            //         // Инициализация datepicker
+            //     });
+            // });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const analysisForm = document.getElementById('analysisForm');
+            const resultsCard = document.getElementById('resultsCard');
+            const calculateButton = document.querySelector('.btn-calculate');
+
+            calculateButton.addEventListener('click', (e) => {
+                e.preventDefault(); 
+
+
+
+                // В реальном приложении:
+                // 1. Собрать данные из формы:
+                //    const formData = new FormData(analysisForm);
+                //    const data = Object.fromEntries(formData.entries());
+                // 2. Отправить AJAX-запрос на сервер:
+                //    fetch('/api/analyze', {
+                //        method: 'POST',
+                //        body: JSON.stringify(data),
+                //        headers: {
+                //            'Content-Type': 'application/json',
+                //            'X-CSRFToken': '{{ csrf_token }}' // Для Django
+                //        }
+                //    })
+                //    .then(response => response.json())
+                //    .then(result => {
+                //        // Обновить DOM с реальными результатами
+                //        document.getElementById('riskLevel').textContent = 'Уровень риска: ' + result.riskLevel;
+                //        document.getElementById('riskLevel').className = 'risk-level ' + result.riskClass; // 'low', 'medium', 'high'
+                //        // ... обновить другие элементы resultsCard
+                //        resultsCard.style.display = 'block';
+                //    })
+                //    .catch(error => console.error('Error:', error));
+
+
+                resultsCard.style.display = 'block';
+                resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                const riskLevels = ['low', 'medium', 'high'];
+                const randomRisk = riskLevels[Math.floor(Math.random() * riskLevels.length)];
+                document.getElementById('riskLevel').className = 'risk-level ' + randomRisk;
+                document.getElementById('riskLevel').textContent = `Уровень риска: ${randomRisk === 'low' ? 'Низкий' : randomRisk === 'medium' ? 'Средний' : 'Высокий'}`;
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,299 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax-referent — система оценки риска</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0A2E65;
+            --secondary-blue: #3E8EFF;
+            --light-blue: #EFF6FF;
+            --text-dark: #333;
+            --text-light: #666;
+            --white: #fff;
+            --gray-bg: #F8F9FA;
+            --gradient-blue: linear-gradient(90deg, #3E8EFF 0%, #0A2E65 100%);
+            --gradient-green: linear-gradient(90deg, #6DD5ED 0%, #2193B0 100%);
+            --gradient-orange: linear-gradient(90deg, #FDBB2D 0%, #22C55E 100%); /* Пример, можно изменить */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--white);
+        }
+
+        .nav-menu ul {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--secondary-blue);
+        }
+
+        .auth-button {
+            background-color: var(--secondary-blue);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background-color: #307ae7;
+        }
+
+      
+        .footer {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 60px 0;
+            font-size: 15px;
+        }
+
+        .footer .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: left;
+        }
+
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--secondary-blue);
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 50px;
+            background-color: var(--secondary-blue);
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 992px) {
+            .nav-menu ul {
+                gap: 20px;
+            }
+            .hero-content h1 {
+                font-size: 40px;
+            }
+            .hero-content p {
+                font-size: 16px;
+            }
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-content, .hero-image {
+                padding-right: 0;
+            }
+            .hero-image {
+                margin-top: 40px;
+            }
+            .section-title {
+                font-size: 30px;
+            }
+            .footer .container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-menu ul {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .hero-section {
+                padding: 60px 0;
+            }
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .hero-content p {
+                font-size: 15px;
+            }
+            .hero-button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            .features-grid, .how-it-works-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 26px;
+                margin-bottom: 40px;
+            }
+            .accordion-header {
+                font-size: 18px;
+                padding: 18px 20px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-col h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="{% url 'home' %}" class="logo">Tax-referent</a>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url 'analys' %}">Провести анализ</a></li>
+                    <li><a href="{% url 'contact' %}">Контакты</a></li>
+                </ul>
+            </nav>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="auth-button">Профиль</a>
+                {% else %}
+                    <a href="{% url 'signin' %}" class="auth-button">Вход</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </header>
+
+      {% block content %}
+
+      {% endblock %}
+
+      <footer class="footer">
+        <div class="container">
+            <div class="footer-col">
+                <h4>О проекте</h4>
+                <ul>
+                    <li><a href="#">Наша миссия</a></li>
+                    <li><a href="#">Команда</a></li>
+                    <li><a href="#">Новости</a></li>
+                    <li><a href="#">Частые вопросы</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Пользователям</h4>
+                <ul>
+                    <li><a href="#">Начать проверку</a></li>
+                    <li><a href="#">Личный кабинет</a></li>
+                    <li><a href="#">Тарифы</a></li>
+                    <li><a href="#">Помощь</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Поддержка</a></li>
+                    <li><a href="#">Политика конфиденциальности</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Дополнительно</h4>
+                <ul>
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Партнерство</a></li>
+                    <li><a href="#">Карта сайта</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Tax-referent. Все права защищены.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
