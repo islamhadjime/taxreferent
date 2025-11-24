@@ -1,5 +1,4 @@
 # 🚀 Tax-Referent: Система анализа налоговых рисков
-![Главный интерфейс системы](https://github.com/islamhadjime/taxreferent/blob/main/static/main/2025-11-24_22-29-57.png)
 ![Главный интерфейс системы](https://github.com/islamhadjime/taxreferent/blob/main/static/main/2025-11-24_22-29-39.png)
 ![Главный интерфейс системы](https://github.com/islamhadjime/taxreferent/blob/main/static/main/2025-11-24_22-29-49.png)
 ## 📋 О проекте
