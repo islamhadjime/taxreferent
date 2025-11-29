@@ -1,4 +1,3 @@
-# main/services/risk_analysis_service.py
 import logging
 from datetime import datetime
 
@@ -239,8 +238,8 @@ class RiskAnalysisService:
             # Основные метрики
             'profitability_ratio_start': round(criteria.get('profitability_sales', 0), 2),
             'profitability_ratio_end': round(criteria.get('profitability_sales', 0), 2),
-            'revenue_growth': 0,  # Можно добавить расчет
-            'profit_growth': 0,   # Можно добавить расчет  
+            'revenue_growth': 0,  
+            'profit_growth': 0,   
             'tax_burden': round(criteria.get('tax_burden', 0), 2),
             'risk_score': total_risk_score,
             
