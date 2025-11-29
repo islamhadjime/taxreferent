@@ -3,8 +3,8 @@ import logging
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout # Встроенные функции аутентификации
-from django.contrib.auth.decorators import login_required # Для защиты представлений
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required 
 from .models import Analysis, CompanyUser 
 from .forms import RegistrationForm, LoginForm, AnalysisForm, EmailSettingsForm
 from django.http import JsonResponse
@@ -24,7 +24,6 @@ try:
 except ImportError as e:
     print(f"❌ Ошибка импорта RiskAnalysisService: {e}")
     
-    # Заглушка на случай ошибки
     class RiskAnalysisService:
         @staticmethod
         def calculate_risk_analysis(form_data):
@@ -79,7 +78,6 @@ def signin_page(request):
         
         print(f"1. Input: username='{username}', password='{password}'")
         
-        # Проверяем существует ли пользователь
         try:
             user_by_username = User.objects.get(username=username)
             print(f"2. Found by username: {user_by_username}")
@@ -88,12 +86,10 @@ def signin_page(request):
             print("2. User not found by username")
             user_by_username = None
         
-        # Проверяем стандартную аутентификацию
         print("3. Testing standard authenticate...")
         user_auth = authenticate(request, username=username, password=password)
         print(f"   authenticate() result: {user_auth}")
         
-        # Проверяем все возможные причины
         if user_by_username:
             print(f"4. User details:")
             print(f"   - is_active: {user_by_username.is_active}")
@@ -136,9 +132,8 @@ def signup_page(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
-        inn = request.POST.get('inn')  # Добавляем поле ИНН
+        inn = request.POST.get('inn') 
         
-        # Валидация
         errors = []
         
         if password != password2:
@@ -150,7 +145,6 @@ def signup_page(request):
         if CompanyUser.objects.filter(username=username).exists():
             errors.append('Пользователь с таким именем уже существует')
         
-        # Проверка ИНН
         if inn:
             if CompanyUser.objects.filter(inn=inn).exists():
                 errors.append('Компания с таким ИНН уже зарегистрирована')
@@ -166,7 +160,6 @@ def signup_page(request):
                 'inn_error': inn_error
             })
         
-        # Получаем данные компании по ИНН
         if inn:
             company_data = get_company_data_from_rusprofile(inn)
             print(company_data)
@@ -176,7 +169,6 @@ def signup_page(request):
                 errors.append(f'Ошибка получения данных компании: {company_data.get("error")}')
                 inn_error = company_data.get('error')
             else:
-                # Проверяем, что найденный ИНН совпадает с введенным
                 if company_data.get('inn') != inn:
                     errors.append('Найденный ИНН не совпадает с введенным')
         
@@ -189,7 +181,6 @@ def signup_page(request):
                 'inn_error': inn_error
             })
         
-        # Создание пользователя
         try:
             user = CompanyUser.objects.create_user(
                 username=username, 
@@ -197,7 +188,6 @@ def signup_page(request):
                 password=password
             )
             
-            # Заполняем данные компании если они есть
             if company_data and company_data.get('status') == 'success':
                 user.inn = company_data.get('inn')
                 user.ogrn = company_data.get('ogrn')
@@ -287,39 +277,33 @@ def handle_settings_update(request):
 def logout_view(request):
     """Выход из системы."""
     logout(request)
-    return redirect('home')  # или на страницу входа
+    return redirect('home')  
 
 
 
 
 
-# Импорт сервиса анализа
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def create_analysis(request):
     """Создание нового анализа на основе данных формы"""
     try:
-        # Получаем данные из формы
         if request.content_type == 'application/json':
             form_data = json.loads(request.body)
         else:
             form_data = request.POST.dict()
         
-        print("📨 Получены данные формы:", {k: v for k, v in form_data.items() if not k.startswith('_')})
         
-        # Проверяем обязательные поля
         if not form_data.get('period_start') or not form_data.get('period_end'):
             return JsonResponse({
                 'success': False,
                 'error': 'Не указан период анализа'
             })
         
-        # Выполняем анализ рисков
         analysis_result = RiskAnalysisService.calculate_risk_analysis(form_data)
         print("📊 Результат анализа:", analysis_result)
         
-        # Создаем полный анализ со всеми полями
         analysis = Analysis(
             user=request.user,
             name=f"Анализ от {datetime.now().strftime('%d.%m.%Y')}",
@@ -327,7 +311,6 @@ def create_analysis(request):
             period_end_date=form_data['period_end'],
             visible=True,
             
-            # Основные показатели (начало периода)
             revenue_base_start=float(form_data.get('revenue_base_start', 0) or 0),
             revenue_early_start=float(form_data.get('revenue_early_start', 0) or 0),
             profit_sales_start=float(form_data.get('profit_sales_start', 0) or 0),
@@ -346,7 +329,6 @@ def create_analysis(request):
             vat_deduction_start=float(form_data.get('vat_deduction_start', 0) or 0),
             vat_accrued_start=float(form_data.get('vat_accrued_start', 0) or 0),
             
-            # Основные показатели (конец периода)
             revenue_base_end=float(form_data.get('revenue_base_end', 0) or 0),
             revenue_early_end=float(form_data.get('revenue_early_end', 0) or 0),
             profit_sales_end=float(form_data.get('profit_sales_end', 0) or 0),
@@ -365,20 +347,17 @@ def create_analysis(request):
             vat_deduction_end=float(form_data.get('vat_deduction_end', 0) or 0),
             vat_accrued_end=float(form_data.get('vat_accrued_end', 0) or 0),
             
-            # Факторы риска
             doubtful_counterparties=bool(form_data.get('doubtful_counterparties')),
             no_explanation_notification=bool(form_data.get('no_explanation_notification')),
             frequent_location_change=bool(form_data.get('frequent_location_change')),
         )
         
-        # Добавляем результаты анализа
         for field, value in analysis_result.items():
             if hasattr(analysis, field):
                 setattr(analysis, field, value)
                 print(f"✅ Установлено поле {field}: {value}")
         
         analysis.save()
-        print(f"🎉 Анализ успешно создан с ID: {analysis.id}")
         
         return JsonResponse({
             'success': True,
@@ -408,7 +387,6 @@ def create_analysis(request):
     except Exception as e:
         logger.error(f"Ошибка при создании анализа: {e}")
         import traceback
-        print("🔴 Полная трассировка ошибки:")
         traceback.print_exc()
         
         return JsonResponse({
@@ -428,11 +406,7 @@ def analysis_detail(request, analysis_id):
 def delete_analysis(request, analysis_id):
     """Удаление анализа"""
     try:
-        # Находим анализ пользователя
         analysis = get_object_or_404(Analysis, id=analysis_id, user=request.user)
-        
-        # ИСПРАВЛЕНО: было print(analys) - опечатка!
-        print(f"Удаление анализа: {analysis.name}")  # Правильно: analysis
         
         analysis_name = analysis.name
         analysis.delete()
